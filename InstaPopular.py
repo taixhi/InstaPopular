@@ -49,10 +49,24 @@ def getUser(browser, target_username):
   try:
     followers = browser.find_elements_by_class_name('_bkw5z')[1].text
     followings = browser.find_elements_by_class_name('_bkw5z')[2].text
+    shared_data = browser.execute_script('return window._sharedData')
+    data = shared_data["entry_data"]["ProfilePage"][0]["user"]
+    total_comment_count = 0
+    total_like_count = 0
+    for photo in data["media"]["nodes"]:
+      total_comment_count += photo["comments"]["count"]
+      total_like_count += photo["likes"]["count"]
+    avg_comment_count = total_comment_count / len(data["media"]["nodes"])
+    avg_like_count = total_like_count / len(data["media"]["nodes"])
   except IndexError:
     followers = 'null'
     followings = 'null'
-  userData = {target_username: [followers, followings]}
+    avg_like_count = 0
+    avg_comment_count = 0
+  except ZeroDivisionError:
+    avg_like_count = 0
+    avg_comment_count = 0
+  userData = {target_username: [followers, followings, avg_like_count, avg_comment_count]}
   print('DATA:')
   print(userData)
   return userData
