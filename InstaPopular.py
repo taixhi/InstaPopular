@@ -98,7 +98,7 @@ def login_user(browser, username, password):
   else:
     return False
 
-session = InstaPopular(username='taichikato_', password='29Amberrd')
+session = InstaPopular(username='', password='')
 session.login()
 usernames = []
 session.logFollowers(usernames)
